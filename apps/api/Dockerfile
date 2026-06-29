@@ -19,10 +19,15 @@ FROM node:22-bookworm-slim AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 
-# Production dependencies only.
+# Production dependencies only. npm itself is then removed from the runtime
+# image: the app starts with `node`, never npm, so shipping a package manager
+# (and its own transitive CVEs, e.g. bundled picomatch) only widens the attack
+# surface. This keeps the final image clean under Trivy.
 COPY package.json package-lock.json* ./
 COPY apps/api/package.json ./apps/api/package.json
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm ci --omit=dev \
+ && npm cache clean --force \
+ && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 
 # Compiled app + raw SQL assets needed at runtime (migrations / seed).
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
