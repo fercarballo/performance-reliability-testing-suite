@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Telco Reliability Lab — Self-care demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">◴</span>
+        <div>
+          <h1>Telco Reliability Lab</h1>
+          <p class="subtitle">Self-care demo · system under test</p>
+        </div>
+      </div>
+      <span id="apiPill" class="pill pill-muted">checking API…</span>
+    </header>
+
+    <main>
+      <!-- Login -->
+      <section id="loginCard" class="card">
+        <h2>1 · Sign in</h2>
+        <p class="hint">
+          Synthetic users <code>user_001</code> … <code>user_100</code>,
+          password <code>password123</code>.
+        </p>
+        <form id="loginForm" class="row">
+          <input id="username" value="user_001" autocomplete="off" />
+          <input id="password" type="password" value="password123" />
+          <button type="submit">Login</button>
+        </form>
+        <p id="loginStatus" class="status"></p>
+      </section>
+
+      <!-- Authenticated area -->
+      <section id="app" hidden>
+        <section class="card">
+          <h2>2 · Invoices</h2>
+          <button id="loadInvoices" class="secondary">Load invoices</button>
+          <div id="invoices" class="invoices"></div>
+        </section>
+
+        <section class="card">
+          <h2>3 · Change plan</h2>
+          <div class="row">
+            <select id="planSelect"></select>
+            <button id="changePlan" class="secondary">Schedule change</button>
+          </div>
+          <p id="planStatus" class="status"></p>
+        </section>
+
+        <section class="card">
+          <h2>4 · Pay an invoice</h2>
+          <p class="hint">
+            Uses an <code>Idempotency-Key</code> — paying twice with the same key
+            never charges twice.
+          </p>
+          <div class="row">
+            <input id="payInvoiceId" placeholder="invoice_001_2" />
+            <button id="payInvoice" class="secondary">Pay</button>
+          </div>
+          <p id="payStatus" class="status"></p>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        This UI exists only to make the journeys visible. The real load is driven
+        by <strong>k6</strong> straight against the API.
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

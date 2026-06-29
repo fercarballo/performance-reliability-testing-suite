@@ -1,0 +1,23 @@
+title = "Telco Reliability Lab — gitleaks configuration"
+
+# Start from gitleaks' built-in rule set, then allow-list the values that are
+# intentionally present and are NOT real secrets (synthetic demo data and
+# clearly-labelled local-only placeholders).
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Synthetic/demo values — deterministic test data, never real secrets"
+regexTarget = "match"
+regexes = [
+  '''dev-only-secret-change-me''',          # documented local-only JWT placeholder
+  '''password123''',                         # shared password for synthetic users
+  '''POSTGRES_PASSWORD:\s*telco''',          # local compose database password
+]
+paths = [
+  '''\.env\.example$''',
+  '''docker-compose\.yml$''',
+  '''tests/k6/data/.*\.csv$''',
+  '''docs/.*\.md$''',
+  '''README\.md$''',
+]

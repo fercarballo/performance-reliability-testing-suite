@@ -1,0 +1,33 @@
+# The collector is the single ingestion point for telemetry from the API.
+# Today it forwards traces to Tempo; keeping a collector in the middle (rather
+# than exporting straight to Tempo) mirrors real deployments and makes it cheap
+# to add sampling, redaction or extra backends later.
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 1s
+
+exporters:
+  otlp/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+  debug:
+    verbosity: basic
+
+service:
+  telemetry:
+    logs:
+      level: warn
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/tempo, debug]

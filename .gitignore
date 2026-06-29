@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+*.env
+!.env.example
+
+# k6 generated reports (evidence is curated under docs/evidence/, raw runs are ignored)
+tests/k6/reports/*.json
+tests/k6/reports/*.html
+!tests/k6/reports/.gitkeep
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Docker volumes (if ever bind-mounted locally)
+.data/

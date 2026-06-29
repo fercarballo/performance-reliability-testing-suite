@@ -1,0 +1,6 @@
+planId,name,type,speedMbps,monthlyPrice
+mobile_5gb,Mobile 5GB,mobile,50,14999
+mobile_20gb,Mobile 20GB,mobile,100,19999
+fiber_300mb,Fiber 300MB,fiber,300,22999
+fiber_600mb,Fiber 600MB,fiber,600,28999
+fiber_1gb,Fiber 1GB,fiber,1000,35999

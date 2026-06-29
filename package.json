@@ -1,0 +1,32 @@
+{
+  "name": "telco-reliability-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Performance & Reliability Testing Suite over a Telco self-care demo platform (k6, Prometheus, Grafana, OpenTelemetry, Tempo, Loki).",
+  "license": "MIT",
+  "workspaces": [
+    "apps/api"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace apps/api",
+    "lint": "npm run lint --workspace apps/api",
+    "test": "npm run test --workspace apps/api",
+    "dev:api": "npm run dev --workspace apps/api",
+    "stack:up": "docker compose up -d --build",
+    "stack:down": "docker compose down -v",
+    "stack:logs": "docker compose logs -f api",
+    "k6:smoke": "docker compose run --rm k6 run /scripts/scenarios/smoke.js",
+    "k6:load": "docker compose run --rm k6 run /scripts/scenarios/load.js",
+    "k6:stress": "docker compose run --rm k6 run /scripts/scenarios/stress.js",
+    "k6:spike": "docker compose run --rm k6 run /scripts/scenarios/spike.js",
+    "k6:soak": "docker compose run --rm k6 run /scripts/scenarios/soak.js",
+    "k6:degradation": "docker compose run --rm k6 run /scripts/scenarios/degradation.js",
+    "k6:smoke:prom": "docker compose run --rm -e K6_OUT=experimental-prometheus-rw k6 run /scripts/scenarios/smoke.js",
+    "k6:load:prom": "docker compose run --rm -e K6_OUT=experimental-prometheus-rw k6 run /scripts/scenarios/load.js",
+    "k6:degradation:prom": "docker compose run --rm -e K6_OUT=experimental-prometheus-rw k6 run /scripts/scenarios/degradation.js",
+    "gen:data": "node scripts/generate-k6-data.js 100"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

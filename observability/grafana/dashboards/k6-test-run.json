@@ -1,0 +1,145 @@
+{
+  "uid": "telco-k6-test-run",
+  "title": "Telco — k6 Test Run",
+  "tags": ["telco", "k6", "load"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": { "from": "now-30m", "to": "now" },
+  "templating": { "list": [] },
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Active VUs",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "targets": [
+        { "refId": "A", "expr": "k6_vus", "legendFormat": "vus" },
+        { "refId": "B", "expr": "k6_vus_max", "legendFormat": "vus_max" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Request rate (req/s)",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(k6_http_reqs_total[1m]))",
+          "legendFormat": "http reqs"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Checks pass rate / HTTP failed rate",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "percentunit" }, "overrides": [] },
+      "targets": [
+        { "refId": "A", "expr": "max(k6_checks_rate)", "legendFormat": "checks pass" },
+        {
+          "refId": "B",
+          "expr": "max(k6_http_req_failed_rate)",
+          "legendFormat": "http failed"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Latency p95 by journey (ms)",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 7 },
+      "fieldConfig": { "defaults": { "unit": "ms" }, "overrides": [] },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(k6_login_duration_p95)",
+          "legendFormat": "login"
+        },
+        {
+          "refId": "B",
+          "expr": "max(k6_invoice_lookup_duration_p95)",
+          "legendFormat": "invoice_lookup"
+        },
+        {
+          "refId": "C",
+          "expr": "max(k6_plan_change_duration_p95)",
+          "legendFormat": "plan_change"
+        },
+        {
+          "refId": "D",
+          "expr": "max(k6_payment_duration_p95)",
+          "legendFormat": "payment"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "HTTP request duration p95 / p99 (ms)",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 7 },
+      "fieldConfig": { "defaults": { "unit": "ms" }, "overrides": [] },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(k6_http_req_duration_p95)",
+          "legendFormat": "p95"
+        },
+        {
+          "refId": "B",
+          "expr": "max(k6_http_req_duration_p99)",
+          "legendFormat": "p99"
+        },
+        {
+          "refId": "C",
+          "expr": "max(k6_iteration_duration_p95)",
+          "legendFormat": "iteration p95"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Success rate by journey",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 }, "overrides": [] },
+      "targets": [
+        { "refId": "A", "expr": "max(k6_login_success_rate_rate)", "legendFormat": "login" },
+        {
+          "refId": "B",
+          "expr": "max(k6_invoice_lookup_success_rate_rate)",
+          "legendFormat": "invoice_lookup"
+        },
+        {
+          "refId": "C",
+          "expr": "max(k6_plan_change_success_rate_rate)",
+          "legendFormat": "plan_change"
+        },
+        {
+          "refId": "D",
+          "expr": "max(k6_payment_success_rate_rate)",
+          "legendFormat": "payment"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Idempotency conflicts prevented (per s)",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(k6_payment_idempotency_conflicts_total[1m]))",
+          "legendFormat": "conflicts/s"
+        }
+      ]
+    }
+  ]
+}
