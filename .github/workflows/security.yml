@@ -74,11 +74,18 @@ jobs:
           persist-credentials: false
       - name: Build API image
         run: docker build -t telco-api:scan -f apps/api/Dockerfile .
-      - name: Trivy scan (HIGH/CRITICAL)
-        uses: aquasecurity/trivy-action@v0.30.0
-        with:
-          image-ref: telco-api:scan
-          format: table
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: "1"
+      # Run Trivy via its official image rather than the marketplace action: the
+      # action pins internal helpers (setup-trivy) to tags that get removed,
+      # which is exactly the kind of brittle supply-chain coupling a security
+      # pipeline shouldn't have. This is self-contained and reproducible.
+      - name: Trivy scan (HIGH/CRITICAL, fail on fixable)
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:latest image \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --scanners vuln \
+            --exit-code 1 \
+            --no-progress \
+            telco-api:scan
