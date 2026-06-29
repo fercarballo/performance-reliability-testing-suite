@@ -75,7 +75,7 @@ jobs:
       - name: Build API image
         run: docker build -t telco-api:scan -f apps/api/Dockerfile .
       - name: Trivy scan (HIGH/CRITICAL)
-        uses: aquasecurity/trivy-action@v0.30.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: telco-api:scan
           format: table
