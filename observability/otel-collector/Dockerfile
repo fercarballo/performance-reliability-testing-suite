@@ -4,7 +4,7 @@
 # scratch base and the container fails with "exec ... no such file or
 # directory". We re-home the exact same upstream binary onto a slim glibc base
 # so the dynamic loader is present. Functionally identical, just portable.
-FROM otel/opentelemetry-collector-contrib:0.116.0 AS upstream
+FROM otel/opentelemetry-collector-contrib:0.157.0 AS upstream
 
 FROM debian:bookworm-slim
 COPY --from=upstream /otelcol-contrib /otelcol-contrib
